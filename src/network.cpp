@@ -10,8 +10,14 @@ using namespace std;
 
 #define print printf
 
-//-------------------------------------------------------------------
-bool fread_until(ifstream& file, string target, bool stop_before){
+//--------------------------------------------------------------------------------
+bool    file_find       (ifstream& file, string target, bool stop_before){
+    /**
+     * Searches for a string in a file.
+     * @arg stop_before Tries to move back the cursor before the target
+     * @return Search verdict
+     * @note Cursor position in input sequence will be modified.
+     */
     if(!file.is_open())
         return false;
 
@@ -31,11 +37,14 @@ bool fread_until(ifstream& file, string target, bool stop_before){
         file.seekg(current_position,ios_base::beg);
     
     return found;}
-// End fread_until()
+// End file_find()
 
-//-------------------------------------------------------------------
-int print_graph(map<int,vector<int>> & graph){
-    // print graph ( map<int,vector<int>> )
+//--------------------------------------------------------------------------------
+int     print_graph     (map<int,vector<int>> & graph){
+    /**
+     * Prints a map<int,vector<int>>
+     * @return number of nodes (map keys)
+     */
     size_t node_quantity = 0;
     for(auto& item: graph){
         print("%d\n", item.first);
@@ -47,9 +56,13 @@ int print_graph(map<int,vector<int>> & graph){
     return node_quantity;}
 // End print_graph()
 
-//-------------------------------------------------------------------
-bool create_network(ifstream& file, map<int,vector<int>>& graph){
-    if(!file.is_open() || !fread_until(file,"graph"))
+//--------------------------------------------------------------------------------
+bool    create_network  (ifstream& file, map<int,vector<int>>& graph){
+    /**
+     * Graph abstraction using a file.gml and map<int,vector<int>>
+     * @return true if procedure completed sucessfully.
+     */
+    if(!file.is_open() || !file_find(file,"graph"))
         return false;
     
     string line;
@@ -57,26 +70,30 @@ bool create_network(ifstream& file, map<int,vector<int>>& graph){
         if (line[0] == ']')
             break;
         if (line.find("node") != string::npos){
-            graph[stoi(fread_after(file,"id "))]; // gets id as string and converts to int
+            graph[stoi(file_read(file,"id "))]; // gets id as string and converts to int
         }
         else if (line.find("edge") != string::npos)
-            fread_edge(file,graph);
+            fget_edge(file,graph);
     }
     return true;}
 // End create_network()
 
-//-------------------------------------------------------------------
-bool fread_edge      (ifstream& file, map<int,vector<int>>& graph){
+//--------------------------------------------------------------------------------
+bool    fget_edge       (ifstream& file, map<int,vector<int>>& graph){
+    /**
+     * Creates a edge from file
+     * @return true if edge was read sucessfully.
+     */
     if(!file.is_open())
         return false;
 
-    string check = fread_after(file,"source ");
+    string check = file_read(file,"source ");
     
     int source = -1, target = -1;
     if(!check.empty())
         source = stoi(check);
 
-    check = fread_after(file,"target ");
+    check = file_read(file,"target ");
     if(!check.empty())
         target = stoi(check);
 
@@ -92,15 +109,19 @@ bool fread_edge      (ifstream& file, map<int,vector<int>>& graph){
         graph[source].push_back(target);
 
     return true;}
-// End fread_edge()
+// End fget_edge()
 
-//-------------------------------------------------------------------
-string fread_after     (ifstream& file, string pre, string delimiter){
+//--------------------------------------------------------------------------------
+string  file_read       (ifstream& file, string begin, string end){
+    /**
+     * Read data block from ]begin,end[
+     * @return empty string if search fails.
+     */
     string result;
-    if(!file.is_open() || !fread_until(file,pre))
+    if(!file.is_open() || !file_find(file,begin))
         return result;
     string candidate;
-    string::iterator focus = delimiter.begin();
+    string::iterator focus = end.begin();
     char c;
     bool candidate_is_on = false;
     while ( file.get(c) ){
@@ -110,9 +131,9 @@ string fread_after     (ifstream& file, string pre, string delimiter){
             candidate += c;
             ++focus;
         }
-        else if(focus != delimiter.end()) {
+        else if(focus != end.end()) {
             if(candidate_is_on){
-                focus = delimiter.begin();
+                focus = end.begin();
                 candidate_is_on = false;
                 result += candidate;
             }
@@ -121,4 +142,4 @@ string fread_after     (ifstream& file, string pre, string delimiter){
         else break;
     }
     return result;}
-// End fread_after()
+// End file_find()

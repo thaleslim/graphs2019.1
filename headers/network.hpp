@@ -10,10 +10,10 @@
 
 using namespace std;
 
-bool   fread_until     (ifstream& file, string target, bool stop_before = false);
-string fread_after     (ifstream& file, string pre, string delimiter = "\n");
-int    print_graph     (map<int,vector<int>> & graph);
-bool   create_network  (ifstream& file, map<int,vector<int>>& graph);
-bool   fread_edge      (ifstream& file, map<int,vector<int>>& graph);
+bool    file_find        (ifstream& file, string target, bool stop_before = false);
+string  file_read        (ifstream& file, string begin, string end = "\n");
+int     print_graph      (map<int,vector<int>> & graph);
+bool    create_network   (ifstream& file, map<int,vector<int>>& graph);
+bool    fget_edge        (ifstream& file, map<int,vector<int>>& graph);
 
 #endif
