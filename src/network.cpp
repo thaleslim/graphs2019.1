@@ -1,30 +1,16 @@
+/**
+ * @author Thales Menezes @thaleslim
+ * @date   06/04/2019
+ */
+
+#include "../headers/network.hpp"
 #include <bits/stdc++.h>
 
 using namespace std;
 
 #define print printf
 
-bool   fread_until     (ifstream& file, string target, bool stop_before = false);
-string fread_after     (ifstream& file, string pre, string delimiter = "\n");
-int    print_graph     (map<int,vector<int>> & graph);
-bool   create_network  (ifstream& file, map<int,vector<int>>& graph);
-bool   fread_edge      (ifstream& file, map<int,vector<int>>& graph);
-
-int main(){
-    map<int,vector<int>> graph;
-    ifstream file;
-    file.open("resources/karate.gml");
-
-    if(file.is_open()){
-        create_network(file,graph);
-        file.close();
-        print_graph(graph);
-    }else
-        print("ERROR: file could not be openned");
-
-    return 0;
-}
-
+//-------------------------------------------------------------------
 bool fread_until(ifstream& file, string target, bool stop_before){
     if(!file.is_open())
         return false;
@@ -47,6 +33,7 @@ bool fread_until(ifstream& file, string target, bool stop_before){
     return found;}
 // End fread_until()
 
+//-------------------------------------------------------------------
 int print_graph(map<int,vector<int>> & graph){
     // print graph ( map<int,vector<int>> )
     size_t node_quantity = 0;
@@ -60,6 +47,7 @@ int print_graph(map<int,vector<int>> & graph){
     return node_quantity;}
 // End print_graph()
 
+//-------------------------------------------------------------------
 bool create_network(ifstream& file, map<int,vector<int>>& graph){
     if(!file.is_open() || !fread_until(file,"graph"))
         return false;
@@ -69,52 +57,49 @@ bool create_network(ifstream& file, map<int,vector<int>>& graph){
         if (line[0] == ']')
             break;
         if (line.find("node") != string::npos){
-            /* fread_until(file,"id ");
-            getline (file,line);
-            graph[stoi(line)]; // gets id as string and converts to int*/
             graph[stoi(fread_after(file,"id "))]; // gets id as string and converts to int
         }
         else if (line.find("edge") != string::npos)
             fread_edge(file,graph);
     }
-    return true;
-}
+    return true;}
 // End create_network()
 
+//-------------------------------------------------------------------
 bool fread_edge      (ifstream& file, map<int,vector<int>>& graph){
-    if(!file.is_open() || !fread_until(file,"source "))
+    if(!file.is_open())
         return false;
 
-    string new_line;
-    getline(file,new_line);
-    int source = stoi(new_line);
+    string check = fread_after(file,"source ");
+    
+    int source = -1, target = -1;
+    if(!check.empty())
+        source = stoi(check);
 
-    if(!fread_until(file,"target "))
+    check = fread_after(file,"target ");
+    if(!check.empty())
+        target = stoi(check);
+
+    if( source < 0 || target < 0)
         return false;
-
-    getline(file,new_line);
-    int target = stoi(new_line);
-
+    
     map<int,vector<int>>::iterator it = graph.find(source);
     
     if (it != graph.end())
         graph[target].push_back(source);
-    else
-        return false;
-
     it = graph.find(target);
     if (it != graph.end())
         graph[source].push_back(target);
-    else
-        return false;
 
     return true;}
 // End fread_edge()
 
+//-------------------------------------------------------------------
 string fread_after     (ifstream& file, string pre, string delimiter){
+    string result;
     if(!file.is_open() || !fread_until(file,pre))
-        return nullptr;
-    string result, candidate;
+        return result;
+    string candidate;
     string::iterator focus = delimiter.begin();
     char c;
     bool candidate_is_on = false;
