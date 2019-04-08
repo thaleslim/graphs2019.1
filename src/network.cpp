@@ -103,10 +103,13 @@ bool    fget_edge       (ifstream& file, map<int,vector<int>>& graph){
     map<int,vector<int>>::iterator it = graph.find(source);
     
     if (it != graph.end())
-        graph[target].push_back(source);
+        graph[source].push_back(target);
+    
+    if (source == target) return true; // laço
+
     it = graph.find(target);
     if (it != graph.end())
-        graph[source].push_back(target);
+        graph[target].push_back(source);
 
     return true;}
 // End fget_edge()
