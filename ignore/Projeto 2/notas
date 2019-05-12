@@ -1,0 +1,29 @@
+http://graphviz.org/
+https://www.homeyou.com/~edu/graphviz
+https://graphs.grevian.org/
+https://graphviz.gitlab.io/_pages/Download/Download_source.html
+
+matérias BCC menos (TG1 e TG2)
+
+Vertices Disciplinas (cód unb) peso P (créditos)
+Arestas Pré requisitos
+
+DAG e Caminhos criticos
+ordenação topológica
+somatório dos pesos (maior custo total)
+
+Saída
+Curso
+desenhar DAG
+Caminho critico (disciplinas em ordem e peso total)
+
+
+ordenação topologica + caminho critico
+gerar resultado como png
+
+https://pt.wikipedia.org/wiki/Ordena%C3%A7%C3%A3o_topol%C3%B3gica
+http://noic.com.br/materiais-informatica/curso/aula-18-grafos-vi-ordenacao-topologica/
+https://duckduckgo.com/?q=ordena%C3%A7%C3%A3o+topologica+grafos&t=canonical&iax=videos&ia=videos
+https://duckduckgo.com/?q=caminho+critico+grafos&t=canonical&iar=videos&iax=videos&ia=videos
+aula 11_12
+
